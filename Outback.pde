@@ -15,21 +15,22 @@ ArrayList<Wave> waves;
 // Constants
 int Y_AXIS = 1;
 int X_AXIS = 2;
-int bands = 512;
-float gr = 1.61803398875;
-float horizon = 1/gr;
-float[] spectrum = new float[bands];
+static final int BANDS = 128;
+static final float GR = 1.61803398875;
+float horizon = 0.7;
+float[] spectrum = new float[BANDS];
 
 void setup() {
   size(1280, 720);
   frameRate(30);
+  randomSeed(3);
 
   // Load a soundfile from the /data folder of the sketch and play it back
   soundFile = new SoundFile(this, "Outback.aif");
   println("Frames= " + soundFile.frames() + " frames");
   soundFile.play();
 
-  fft = new FFT(this, bands);
+  fft = new FFT(this, BANDS);
   amp = new Amplitude(this);
   amp.input(soundFile);
   fft.input(soundFile);
@@ -43,7 +44,9 @@ void setup() {
   int nLines = 10;
   for (int i = 0; i < nLines; i++) {
     float margin = height*(1 - horizon)*i*i*i/(nLines - 1)/(nLines - 1)/(nLines - 1);
-    waves.add( new Wave(height*horizon + margin, 65-i*6, margin) );
+    Wave thisWave = new Wave(height*horizon + margin, 40-i*2, margin, random(-1, 1));
+    //thisWave.setSpectrum(spectrum, BANDS);
+    waves.add( thisWave);
   }
 }      
 
@@ -54,26 +57,30 @@ void draw() {
   noFill();
   stroke(250);
 
+  drawFFT(height*horizon - 200);
   line (0, height*horizon, width, height*horizon);
-  
-  /*while (drawQueue.size () > 0) {
-   Drawable d = drawQueue.poll();
-   d.draw();
-   }
-   drawQueue.clear();*/
+
 
   for (Wave w : waves) w.draw();
-
-  drawFFT();
 }
 
-void drawFFT() {
+void drawFFT(float y) {
   fft.analyze(spectrum);
   stroke(255);
   noFill();
-  float maxheight = height/5.;
-  for (int i = 0; i < bands; i++) {
-    float linex = width*1.0/bands*i;
-    line( linex, height, linex, height - spectrum[i]*maxheight*5 );
+  pushMatrix();
+  translate(width/2, y);
+  //rotate(-PI/2);
+  ellipse(0, 0, 160, 160);
+  for (int i = 0; i < BANDS; i++) {
+    //float linex = width*1.0/BANDS*i;
+    //line( linex, y, linex, y - spectrum[i]*height/5. );
+    float linetheta = i*TWO_PI/BANDS;
+    float length = max(0, spectrum[i]*height/5.);
+    if (length > 1) {
+      line(80*cos(linetheta), 80*sin(linetheta), (80+length)*cos(linetheta), (80+length)*sin(linetheta));
+      line(-80*cos(linetheta), -80*sin(linetheta), -(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
+    }
   }
+  popMatrix();
 }
