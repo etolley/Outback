@@ -2,45 +2,44 @@ import java.util.*;
 import processing.sound.*;
 
 //Sound stuff
-SoundFile soundFile;
-AudioIn audioIn;
-Amplitude amp;
+SoundManager sm;
+SoundFile soundFile_all;
+//AudioIn audioIn;
+//Amplitude amp;
 FFT fft;
 
 // Drawing stuff
 PriorityQueue<Drawable> drawQueue;
 Comparator<Drawable> comparator;
 ArrayList<Wave> waves;
+Corona corona;
 
 // Constants
 int Y_AXIS = 1;
 int X_AXIS = 2;
-static final int BANDS = 128;
+//static final int BANDS = 128;
 static final float GR = 1.61803398875;
 float horizon = 0.7;
-float[] spectrum = new float[BANDS];
+//float[] spectrum = new float[BANDS];
 
 void setup() {
   size(1280, 720);
   frameRate(30);
   randomSeed(3);
 
-  // Load a soundfile from the /data folder of the sketch and play it back
-  soundFile = new SoundFile(this, "Outback.aif");
-  println("Frames= " + soundFile.frames() + " frames");
-  soundFile.play();
-
-  fft = new FFT(this, BANDS);
-  amp = new Amplitude(this);
-  amp.input(soundFile);
-  fft.input(soundFile);
+  // Load a soundFile_all from the /data folder of the sketch and play it back
+  //soundFile_all = new SoundFile(this, "Outback" + ".aif");
+  //soundFile_all.play();
+  
+  sm = new SoundManager(this);
+  sm.Play();  
+  sm.PlayAll();
 
   comparator = new DrawableComparator();
   drawQueue = new PriorityQueue<Drawable>(10, comparator);
   waves = new ArrayList <Wave>();
+  corona = new Corona(sm);
 
-  float yStart = height*horizon;
-  float yEnd = height;
   int nLines = 10;
   for (int i = 0; i < nLines; i++) {
     float margin = height*(1 - horizon)*i*i*i/(nLines - 1)/(nLines - 1)/(nLines - 1);
@@ -54,7 +53,6 @@ void draw() {
   background(Color.BLUE1);
   setGradient(0, 0, width, 3*height*horizon/4, Color.BLUE2, Color.BLUE1, Y_AXIS);
   setGradient(0, 3*height*horizon/4., width, height*horizon/4., Color.BLUE1, Color.LILAC, Y_AXIS);
-  //setGradient(0, height*horizon, width, height, Color.LILA, Color.LILAC, Y_AXIS);
   noFill();
 
 
@@ -70,37 +68,22 @@ void draw() {
 
 void drawFFT(float y) {
 
-  fft.analyze(spectrum);
+  sm.Analyze();
+  sm.AnalyzeAll();
+
 
   noFill();
   pushMatrix();
   translate(width/2, y);
-  //rotate(-PI/2);
-  stroke(Color.PINK);
-  for (int i = 0; i < BANDS; i++) {
-    //float linex = width*1.0/BANDS*i;
-    //line( linex, y, linex, y - spectrum[i]*height/5. );
-    float linetheta = i*TWO_PI/BANDS;
-    float length = max(0, spectrum[i]*height/5.);
-    if (length > 1) {
-      line(80*cos(linetheta), 80*sin(linetheta), (80+length)*cos(linetheta), (80+length)*sin(linetheta));
-      line(-80*cos(linetheta), -80*sin(linetheta), -(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
-    }
-  }
+ 
+  corona.draw();
 
-  beginShape();
-  for (int i = 0; i < BANDS; i++) {
-    float linetheta = i*TWO_PI/BANDS;
-    float length = max(0, sqrt(spectrum[i])*height/5.);
-    vertex((80+length)*cos(linetheta), (80+length)*sin(linetheta));
-    vertex(-(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
-      //line(80*cos(linetheta), 80*sin(linetheta), (80+length)*cos(linetheta), (80+length)*sin(linetheta));
-      //line(-80*cos(linetheta), -80*sin(linetheta), -(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
-    
-  }
-  endShape();
-
-  fill(255);
+  fill(Color.BLUE2);
   ellipse(0, 0, 160, 160);
+  
+  for (int i = 0; i < 5; i++){
+  stroke(lerpColor(Color.PINK, Color.LILAC, i/4.));
+  ellipse(0, 0, 159-i*1.5, 159-i*1.5);
+  }
   popMatrix();
 }
