@@ -51,27 +51,32 @@ void setup() {
 }      
 
 void draw() {
-  background(0);
-  setGradient(0, 0, width, height*horizon, Color.BLUE2, Color.BLUE1, Y_AXIS);
-  setGradient(0, height*horizon, width, height, Color.BLUE1, Color.BLUE2, Y_AXIS);
+  background(Color.BLUE1);
+  setGradient(0, 0, width, 3*height*horizon/4, Color.BLUE2, Color.BLUE1, Y_AXIS);
+  setGradient(0, 3*height*horizon/4., width, height*horizon/4., Color.BLUE1, Color.LILAC, Y_AXIS);
+  //setGradient(0, height*horizon, width, height, Color.LILA, Color.LILAC, Y_AXIS);
   noFill();
-  stroke(250);
+
 
   drawFFT(height*horizon - 200);
-  line (0, height*horizon, width, height*horizon);
+
 
 
   for (Wave w : waves) w.draw();
+
+  stroke(Color.PINK);
+  line (0, height*horizon, width, height*horizon);
 }
 
 void drawFFT(float y) {
+
   fft.analyze(spectrum);
-  stroke(255);
+
   noFill();
   pushMatrix();
   translate(width/2, y);
   //rotate(-PI/2);
-  ellipse(0, 0, 160, 160);
+  stroke(Color.PINK);
   for (int i = 0; i < BANDS; i++) {
     //float linex = width*1.0/BANDS*i;
     //line( linex, y, linex, y - spectrum[i]*height/5. );
@@ -82,5 +87,20 @@ void drawFFT(float y) {
       line(-80*cos(linetheta), -80*sin(linetheta), -(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
     }
   }
+
+  beginShape();
+  for (int i = 0; i < BANDS; i++) {
+    float linetheta = i*TWO_PI/BANDS;
+    float length = max(0, sqrt(spectrum[i])*height/5.);
+    vertex((80+length)*cos(linetheta), (80+length)*sin(linetheta));
+    vertex(-(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
+      //line(80*cos(linetheta), 80*sin(linetheta), (80+length)*cos(linetheta), (80+length)*sin(linetheta));
+      //line(-80*cos(linetheta), -80*sin(linetheta), -(80+length)*cos(linetheta), -(80+length)*sin(linetheta));
+    
+  }
+  endShape();
+
+  fill(255);
+  ellipse(0, 0, 160, 160);
   popMatrix();
 }
