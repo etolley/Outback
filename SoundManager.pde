@@ -1,68 +1,68 @@
 
 public class SoundManager {
   public static final int BANDS = 128;
-  public float[] spectrum = new float[BANDS];
-  public static final String song_name = "Outback";
+  //public float[] spectrum = new float[BANDS];
+  /*public static final String song_name = "Outback";
   public String[] element_names = { 
-    "Atmospherics", "Lead_Synth", "Melody", 
-    "Bass", "Snare", "Cymbals", "Starfalls", "Chords", 
-    "Toms", "Hi_hats", "VOX", "Kick"};
-  public static final int nElements = 12;
-  int ATMOS, SYNTH, MELOD, BASS, SNARE, CYMB, STAR, CHORDS, TOMS, HIHATS, VOX, KICK;
-
+    "Chords", //outermost
+    "Melody", 
+    "Bass",
+    //"Atmospherics",
+    "Lead_Synth", 
+    "Cymbals",  
+    "Toms", "Hi_hats", "VOX",
+    "Snare",
+    "Starfalls",
+    "Kick", // innermost
+  };*/
+  /*public static final int nElements = 11;
   public SoundFile[] elements;
   public FFT[] elements_fft;
   public float[][] element_spectrum = new float[nElements][BANDS];
   SoundFile soundFile_all;
-  FFT fft;
+  FFT fft;*/
+  
+  ArrayList<SoundElement> soundElements;
 
   SoundManager(PApplet p) {
-    fft =  new FFT(p, BANDS);
-    soundFile_all = new SoundFile(p, "Outback.aif");
-    fft.input(soundFile_all);
-
-    elements = new SoundFile[nElements];
-    elements_fft = new FFT[nElements];
-    for (int i = 0; i < nElements; i++) {
-      elements[i] = new SoundFile(p, "channels/"+element_names[i]+".aif");
-      elements_fft[i] = new FFT(p, BANDS);
-      elements_fft[i].input(elements[i]);
-    }
+    soundElements = new ArrayList<SoundElement>();
+    soundElements.add(new SoundElement(p,BANDS,"Outback","Outback.aif" ));
+    soundElements.add(new SoundElement(p,BANDS,"Chords","channels/Chords.aif" ));
+    
   }
 
-  void Play(int e) {
-    elements[e].play();
+  void play(int e) {
+    soundElements.get(e).play();
   }
 
-  void PlayAll() {
-    for (int i = 0; i < nElements; i++) 
-      elements[i].play();
+  void playAll() {
+    for (int i = 1; i < soundElements.size(); i++) 
+      soundElements.get(i).play();
   }
 
-  void Play() {
-    soundFile_all.play();
+  void play() {
+    soundElements.get(0).play();
   }
 
-
-  void Analyze(int e) {
-    elements_fft[e].analyze(element_spectrum[e]);
+  void analyze(int e) {
+    soundElements.get(e).analyze();
   }
 
-  void AnalyzeAll() {
-    for (int i = 0; i < nElements; i++) 
-      elements_fft[i].analyze(element_spectrum[i]);
+  void analyzeAll() {
+    for (int i = 1; i < soundElements.size(); i++) 
+      soundElements.get(i).analyze();
   }
 
-  void Analyze() {
-    fft.analyze(spectrum);
+  void analyze() {
+    soundElements.get(0).analyze();
   }
 
-  float[] GetFullSpectrum() {
-    return spectrum;
+  float[] spectrum() {
+    return soundElements.get(0).spectrum();
   }
   
-  float[] GetSpectrum(int e) {
-    return element_spectrum[e];
+  float[] spectrum(int e) {
+    return soundElements.get(e).spectrum();
   }
 
   int GetBands() {
@@ -70,6 +70,10 @@ public class SoundManager {
   }
   
   int getNElements(){
-    return nElements;
+    return soundElements.size();
+  }
+  
+  String name(int e){
+    return soundElements.get(e).name();
   }
 }

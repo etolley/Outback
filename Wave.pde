@@ -56,13 +56,17 @@ public class Wave implements Drawable {
     vertex(width, height);
     endShape();
 
-    stroke(Color.PINK);
-    noFill();
+    //noFill();
+    //stroke(Color.PINK);
+    noStroke();
+    fill(Color.PINK,max(10,255-sqrt(margin)*20));
+
     beginShape();
-    for (int i = nPts/2-3 ; i < nPts/2 +3 ; i++) {
-      //if (xpts[i] > width/3. && xpts[i] < width*2/3.)
+    for (int i = nPts/2-3; i < nPts/2 +3; i++) {
       vertex(xpts[i], ypts[i]);
     }
+    vertex(width/2,ypts[nPts/2]+margin+10);
+    vertex(xpts[nPts/2-3],ypts[nPts/2-3]);
     endShape();
   }
 }

@@ -14,6 +14,8 @@ Comparator<Drawable> comparator;
 ArrayList<Wave> waves;
 Corona corona;
 
+PShader blur;
+
 // Constants
 int Y_AXIS = 1;
 int X_AXIS = 2;
@@ -26,14 +28,16 @@ void setup() {
   size(1280, 720);
   frameRate(30);
   randomSeed(3);
+  
+  blur = loadShader("blur.glsl");
 
   // Load a soundFile_all from the /data folder of the sketch and play it back
   //soundFile_all = new SoundFile(this, "Outback" + ".aif");
   //soundFile_all.play();
   
   sm = new SoundManager(this);
-  sm.Play();  
-  sm.PlayAll();
+  sm.play();  
+  sm.playAll();
 
   comparator = new DrawableComparator();
   drawQueue = new PriorityQueue<Drawable>(10, comparator);
@@ -47,6 +51,8 @@ void setup() {
     //thisWave.setSpectrum(spectrum, BANDS);
     waves.add( thisWave);
   }
+  
+  //Color.setPink();
 }      
 
 void draw() {
@@ -68,8 +74,8 @@ void draw() {
 
 void drawFFT(float y) {
 
-  sm.Analyze();
-  sm.AnalyzeAll();
+  sm.analyze();
+  sm.analyzeAll();
 
 
   noFill();
