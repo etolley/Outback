@@ -25,7 +25,7 @@ public class Corona implements Drawable {
   }
 
   void drawLines() {
-    stroke(Color.PINK);
+    stroke(colors.LIGHT);
     for (int i = 0; i < sm.GetBands(); i++) {
       float linetheta = i*TWO_PI/sm.GetBands();
       float length = max(0, sm.spectrum()[i]*height/5.);
@@ -68,19 +68,19 @@ public class Corona implements Drawable {
       }
     }
 
-    for (int e = 1; e < sm.getNElements(); e++){
+    for (int e = 1; e < 4/*sm.getNElements()*/; e++){
       rvec[e] = getRays(sm.spectrum(e));
     }
 
-    fill(Color.PINK,40);
-    for (int ir = 1; ir < sm.getNElements(); ir ++) {
-      stroke(Color.PINK);
+    fill(colors.LIGHT,40);
+    for (int ir = 1; ir < 4/*sm.getNElements()*/; ir ++) {
+      stroke(colors.LIGHT);
       beginShape();
       for (int i = 0; i < sm.GetBands()+1; i++) {
         //float rp =80 + rvec[ir][i] + ir*5;
-        float rp = 80;
-        for (int j = ir; j < sm.getNElements(); j++) {
-          rp += 5+ rvec[j][i];
+        float rp = 70;
+        for (int j = ir; j < 4/*sm.getNElements()*/; j++) {
+          rp += 10+ rvec[j][i];
         }
         vertex(rp*cos(thetapts[i]), rp*sin(thetapts[i]));
       }

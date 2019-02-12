@@ -13,6 +13,7 @@ PriorityQueue<Drawable> drawQueue;
 Comparator<Drawable> comparator;
 ArrayList<Wave> waves;
 Corona corona;
+PaletteManager colors;
 
 PShader blur;
 
@@ -28,17 +29,12 @@ void setup() {
   size(1280, 720);
   frameRate(30);
   randomSeed(3);
-  
+
   blur = loadShader("blur.glsl");
 
-  // Load a soundFile_all from the /data folder of the sketch and play it back
-  //soundFile_all = new SoundFile(this, "Outback" + ".aif");
-  //soundFile_all.play();
-  
   sm = new SoundManager(this);
-  sm.play();  
-  sm.playAll();
 
+  colors = new PaletteManager(loadImage("outback_palette.png"), sm.frames());
   comparator = new DrawableComparator();
   drawQueue = new PriorityQueue<Drawable>(10, comparator);
   waves = new ArrayList <Wave>();
@@ -51,14 +47,22 @@ void setup() {
     //thisWave.setSpectrum(spectrum, BANDS);
     waves.add( thisWave);
   }
-  
+
   //Color.setPink();
 }      
 
 void draw() {
-  background(Color.BLUE1);
-  setGradient(0, 0, width, 3*height*horizon/4, Color.BLUE2, Color.BLUE1, Y_AXIS);
-  setGradient(0, 3*height*horizon/4., width, height*horizon/4., Color.BLUE1, Color.LILAC, Y_AXIS);
+  
+  colors.evolve(frameCount);
+
+  if (frameCount == 3) {
+    sm.play();  
+    sm.playAll();
+  }
+
+  background(colors.DARK);
+  setGradient(0, 0, width, 3*height*horizon/4, colors.DARKER, colors.DARK, Y_AXIS);
+  setGradient(0, 3*height*horizon/4., width, height*horizon/4., colors.DARK, colors.MEDIUM, Y_AXIS);
   noFill();
 
 
@@ -68,7 +72,7 @@ void draw() {
 
   for (Wave w : waves) w.draw();
 
-  stroke(Color.PINK);
+  stroke(colors.LIGHT);
   line (0, height*horizon, width, height*horizon);
 }
 
@@ -81,15 +85,24 @@ void drawFFT(float y) {
   noFill();
   pushMatrix();
   translate(width/2, y);
- 
+
   corona.draw();
 
-  fill(Color.BLUE2);
+  fill(colors.DARKER);
   ellipse(0, 0, 160, 160);
-  
-  for (int i = 0; i < 5; i++){
-  stroke(lerpColor(Color.PINK, Color.LILAC, i/4.));
-  ellipse(0, 0, 159-i*1.5, 159-i*1.5);
+
+  for (int i = 0; i < 5; i++) {
+    stroke(lerpColor(colors.LIGHT, colors.MEDIUM, i/4.));
+    ellipse(0, 0, 159-i*1.5, 159-i*1.5);
   }
   popMatrix();
+  
+  fill(colors.LIGHT);
+  rect(20,20,20,20);
+  fill(colors.MEDIUM);
+  rect(20,40,20,20);
+  fill(colors.DARK);
+  rect(20,60,20,20);
+  fill(colors.DARKER);
+  rect(20,80,20,20);
 }

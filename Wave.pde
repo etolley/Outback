@@ -29,9 +29,9 @@ public class Wave implements Drawable {
     return y;
   }
   void draw() {
-    stroke(Color.LILAC);
+    stroke(colors.LIGHT,150);
     //noStroke();
-    fill(Color.BLUE2, margin/2. +5);
+    fill(colors.DARKER, margin/2. +5);
     beginShape();
     vertex(0, height);
     for (int i = 0; i < nPts; i++) {
@@ -59,7 +59,7 @@ public class Wave implements Drawable {
     //noFill();
     //stroke(Color.PINK);
     noStroke();
-    fill(Color.PINK,max(10,255-sqrt(margin)*20));
+    fill(colors.LIGHT,max(10,255-sqrt(margin)*20));
 
     beginShape();
     for (int i = nPts/2-3; i < nPts/2 +3; i++) {

@@ -46,6 +46,10 @@ public class SoundElement {
       ffts.get(i).analyze(spectra.get(i));
   }
   
+  int frames(){
+    return soundFiles.get(0).frames();
+  }
+  
   float[] spectrum(){
     float[] spectrum = new float[bands];
     

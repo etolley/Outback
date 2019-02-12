@@ -1,26 +1,73 @@
-public static class Color 
+public class PaletteManager 
 {
-  public static int LILAC = #6971d0;
-  public static int BLUE1 = #1164b6;
-  public static int BLUE2 = #2e3192;
-  public static int MAGENTA = #ed145b;
-  public static int PINK = #ff96f1;
 
+  public int LIGHT = #ff96f1;
+  public int MEDIUM = #6971d0;
+  public int DARK = #1164b6;
+  public int DARKER = #2e3192;
+  public int BRIGHT = #ed145b;
 
-  static void setBlue() {
-    Color.LILAC = #6971d0;
-    Color.BLUE1 = #1164b6;
-    Color.BLUE2 = #2e3192;
-    Color.MAGENTA = #ed145b;
-    Color.PINK = #ff96f1;
+  PImage palette;
+  int totalFrames;
+  int column; // 0-4
+  float fade;
+
+  public PaletteManager(PImage p_in) {
+    palette = p_in;
+    totalFrames = 0;
+    column = 0;
+    fade = 0;
   }
 
-  static void setPink() {
-    Color.PINK = #ffffff;
-    Color.LILAC = #ff96f1;
-    Color.BLUE1 = #ff96f1;
-    Color.BLUE2 = #2e3192;
-    Color.MAGENTA = #ed145b;
+  public PaletteManager(PImage p_in, int f) {
+    palette = p_in;
+    totalFrames = f;
+    column = 0;
+    fade = 0;
+  }
+
+
+  public void evolve(int i) {
+    palette.loadPixels();
+    if (totalFrames > palette.width) {
+      fade+= 0.005;
+      if (fade > 1) {
+        fade = 0;
+        column += 1;
+      }
+      if (column > palette.width-1) {
+        column = palette.width-1;
+        fade = 1;
+      }
+      println(i + " " + fade + " " + column);
+      
+      int thisLight = palette.pixels[column];
+      int thisMed = palette.pixels[column + palette.width];
+      int thisDark = palette.pixels[column + palette.width*2];
+      int thisDarkr = palette.pixels[column + palette.width*3];
+      
+      int nextLight = thisLight;
+      int nextMed = thisMed;
+      int nextDark = thisDark;
+      int nextDarkr = thisDarkr;
+      
+      if (column < palette.width-1) {
+      nextLight = palette.pixels[column+1];
+      nextMed =palette.pixels[column + 1 + palette.width];
+      nextDark = palette.pixels[column + 1 + palette.width*2];
+      nextDarkr = palette.pixels[column + 1 + palette.width*3];
+      }
+      
+      LIGHT =  lerpColor(thisLight, nextLight, fade);
+      MEDIUM = lerpColor(thisMed, nextMed , fade);
+      DARK =   lerpColor(thisDark, nextDark, fade);
+      DARKER = lerpColor(thisDarkr, nextDarkr, fade);
+    } else {
+      LIGHT = palette.pixels[column];
+      MEDIUM = palette.pixels[column + palette.width];
+      DARK = palette.pixels[column+ palette.width*2];
+      DARKER = palette.pixels[column+ palette.width*3];
+    }
   }
 }
 

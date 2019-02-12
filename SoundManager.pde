@@ -27,8 +27,27 @@ public class SoundManager {
   SoundManager(PApplet p) {
     soundElements = new ArrayList<SoundElement>();
     soundElements.add(new SoundElement(p,BANDS,"Outback","Outback.aif" ));
-    soundElements.add(new SoundElement(p,BANDS,"Chords","channels/Chords.aif" ));
     
+    String[] chords = {"channels/Chords.aif", "channels/Melody.aif", "channels/Bass.aif"};
+    soundElements.add(new SoundElement(p,BANDS,"Chords+Melody+Bass",chords ));
+    
+    String[] drums = {"channels/Kick.aif", "channels/Snare.aif", "channels/Cymbals.aif", "channels/Hi_hats.aif"};
+    soundElements.add(new SoundElement(p,BANDS,"Kick+Snare+Cymbals+HiHats",drums ));
+    
+    soundElements.add(new SoundElement(p,BANDS,"Starfalls","channels/Starfalls.aif" ));
+    
+    soundElements.add(new SoundElement(p,BANDS,"Toms","channels/Toms.aif" ));
+    
+    soundElements.add(new SoundElement(p,BANDS,"VOX","channels/VOX.aif" ));
+    
+    
+    soundElements.add(new SoundElement(p,BANDS,"Lead_Synth","channels/Lead_Synth.aif" ));
+    soundElements.add(new SoundElement(p,BANDS,"Atmospherics","channels/Atmospherics.aif" ));
+    
+  }
+  
+  int frames(){
+    return soundElements.get(0).frames();
   }
 
   void play(int e) {
