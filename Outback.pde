@@ -4,15 +4,14 @@ import processing.sound.*;
 //Sound stuff
 SoundManager sm;
 SoundFile soundFile_all;
-//AudioIn audioIn;
-//Amplitude amp;
-FFT fft;
+//FFT fft;
 
 // Drawing stuff
 PriorityQueue<Drawable> drawQueue;
 Comparator<Drawable> comparator;
 ArrayList<Wave> waves;
 Corona corona;
+Constellation nightSky;
 PaletteManager colors;
 
 PShader blur;
@@ -39,6 +38,7 @@ void setup() {
   drawQueue = new PriorityQueue<Drawable>(10, comparator);
   waves = new ArrayList <Wave>();
   corona = new Corona(sm);
+  nightSky = new Constellation(height*horizon);
 
   int nLines = 10;
   for (int i = 0; i < nLines; i++) {
@@ -66,7 +66,8 @@ void draw() {
   noFill();
 
 
-  drawFFT(height*horizon - 200);
+  drawHeavens(height*horizon - 200);
+  
 
 
 
@@ -74,9 +75,11 @@ void draw() {
 
   stroke(colors.LIGHT);
   line (0, height*horizon, width, height*horizon);
+  
+  drawOverlay();
 }
 
-void drawFFT(float y) {
+void drawHeavens(float y) {
 
   sm.analyze();
   sm.analyzeAll();
@@ -86,6 +89,7 @@ void drawFFT(float y) {
   pushMatrix();
   translate(width/2, y);
 
+  nightSky.draw();
   corona.draw();
 
   fill(colors.DARKER);
@@ -97,6 +101,13 @@ void drawFFT(float y) {
   }
   popMatrix();
   
+
+}
+
+void drawOverlay(){
+  sm.drawAnalysis(width/2, height/2);
+  textAlign(LEFT);
+  text(frameCount, 60,40);
   fill(colors.LIGHT);
   rect(20,20,20,20);
   fill(colors.MEDIUM);

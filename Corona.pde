@@ -55,18 +55,7 @@ public class Corona implements Drawable {
   }
 
   void drawHalo() {
-    textAlign(RIGHT);
-    
-    stroke(#ffffff);
-    fill(255);
-    for (int e = 1; e < sm.getNElements(); e++){
-      text(sm.name(e),width/4-10, -e*20);
-      for (int i = 0; i < sm.GetBands(); i++){
-        line(width/4+i*2,-e*20,width/4+i*2,-e*20-50*sm.spectrum(e)[i]);
-        
-        //sm.GetSpectrum(e)
-      }
-    }
+
 
     for (int e = 1; e < 4/*sm.getNElements()*/; e++){
       rvec[e] = getRays(sm.spectrum(e));

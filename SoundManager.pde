@@ -1,26 +1,6 @@
 
 public class SoundManager {
   public static final int BANDS = 128;
-  //public float[] spectrum = new float[BANDS];
-  /*public static final String song_name = "Outback";
-  public String[] element_names = { 
-    "Chords", //outermost
-    "Melody", 
-    "Bass",
-    //"Atmospherics",
-    "Lead_Synth", 
-    "Cymbals",  
-    "Toms", "Hi_hats", "VOX",
-    "Snare",
-    "Starfalls",
-    "Kick", // innermost
-  };*/
-  /*public static final int nElements = 11;
-  public SoundFile[] elements;
-  public FFT[] elements_fft;
-  public float[][] element_spectrum = new float[nElements][BANDS];
-  SoundFile soundFile_all;
-  FFT fft;*/
   
   ArrayList<SoundElement> soundElements;
 
@@ -31,6 +11,7 @@ public class SoundManager {
     String[] chords = {"channels/Chords.aif", "channels/Melody.aif", "channels/Bass.aif"};
     soundElements.add(new SoundElement(p,BANDS,"Chords+Melody+Bass",chords ));
     
+    //2
     String[] drums = {"channels/Kick.aif", "channels/Snare.aif", "channels/Cymbals.aif", "channels/Hi_hats.aif"};
     soundElements.add(new SoundElement(p,BANDS,"Kick+Snare+Cymbals+HiHats",drums ));
     
@@ -88,11 +69,34 @@ public class SoundManager {
     return BANDS;
   }
   
+  SoundElement getElement(int e){
+    return soundElements.get(e);
+  }
+  
   int getNElements(){
     return soundElements.size();
   }
   
   String name(int e){
     return soundElements.get(e).name();
+  }
+  
+  void drawAnalysis(float x, float y){
+    
+    pushMatrix();
+    translate(x,y);
+    textAlign(RIGHT);
+    
+    stroke(#ffffff);
+    fill(255);
+    for (int e = 1; e < getNElements(); e++){
+      text(name(e),width/4-10, -e*20);
+      for (int i = 0; i < GetBands(); i++){
+        line(width/4+i*2,-e*20,width/4+i*2,-e*20-50*sm.spectrum(e)[i]);
+
+      }
+    }
+    
+    popMatrix();
   }
 }

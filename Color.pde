@@ -39,7 +39,7 @@ public class PaletteManager
         column = palette.width-1;
         fade = 1;
       }
-      println(i + " " + fade + " " + column);
+      //println(i + " " + fade + " " + column);
       
       int thisLight = palette.pixels[column];
       int thisMed = palette.pixels[column + palette.width];
