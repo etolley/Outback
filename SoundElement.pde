@@ -85,4 +85,8 @@ public class SoundElement {
   int bands() {
     return bands;
   }
+  int n(){
+    return soundFiles.size();
+  }
+  
 }

@@ -12,6 +12,7 @@ Comparator<Drawable> comparator;
 ArrayList<Wave> waves;
 Corona corona;
 Constellation nightSky;
+Artifact artifact;
 PaletteManager colors;
 
 PShader blur;
@@ -39,6 +40,7 @@ void setup() {
   waves = new ArrayList <Wave>();
   corona = new Corona(sm);
   nightSky = new Constellation(height*horizon);
+  artifact = new Artifact(sm);
 
   int nLines = 10;
   for (int i = 0; i < nLines; i++) {
@@ -91,15 +93,33 @@ void drawHeavens(float y) {
 
   nightSky.draw();
   corona.draw();
+  
+  
 
-  fill(colors.DARKER);
+  fill(colors.LIGHT);
   ellipse(0, 0, 160, 160);
+  
+  float shadowr = min(max(0,frameCount/2. - 200),155);
+  fill(colors.MEDIUM,shadowr);
+    
+  //ellipse(0, 0, shadowr, shadowr);
+  
+  artifact.draw();
+
+   
+  
+  /*fill(colors.DARKER);
+  ellipse(moonx, moony, 160, 160);
 
   for (int i = 0; i < 5; i++) {
     stroke(lerpColor(colors.LIGHT, colors.MEDIUM, i/4.));
-    ellipse(0, 0, 159-i*1.5, 159-i*1.5);
-  }
+    ellipse(moonx, moony, 159-i*1.5, 159-i*1.5);
+  }*/
   popMatrix();
+  
+  //moon.draw(width/2, y);
+  
+  
   
 
 }
