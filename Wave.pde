@@ -62,6 +62,12 @@ public class Wave implements Drawable {
     fill(colors.LIGHT,max(10,255-sqrt(margin)*20));
 
     beginShape();
+    float xstart1 = xpts[nPts/2-4];
+    float xstart2 = xpts[nPts/2-3];
+    float ystart1 = ypts[nPts/2-4];
+    float ystart2 = ypts[nPts/2-3];
+    //float drift = 1+0.5*sin(0.2*frameCount);
+    //vertex(drift*xstart1 + (1-drift)*xstart2, drift*ystart1 + (1-drift)*ystart2);
     for (int i = nPts/2-3; i < nPts/2 +3; i++) {
       vertex(xpts[i], ypts[i]);
     }

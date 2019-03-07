@@ -30,7 +30,9 @@ public class PaletteManager
   public void evolve(int i) {
     palette.loadPixels();
     if (totalFrames > palette.width) {
-      fade+= 1/320.; //1000
+      //fade+= 1/320.; //1000
+      if (frameCount >= 50)
+        fade+= 1/330.; //1000
       if (fade > 1) {
         fade = 0;
         column += 1;

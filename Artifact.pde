@@ -141,8 +141,8 @@ class Point {
     float dvy = 0;
 
     if (goToGoal) {
-      dvx -= (x-goalx)/10.;
-      dvy -= (y-goaly)/10.;
+      dvx -= (x-goalx)/50.;
+      dvy -= (y-goaly)/50.;
     } else {
 
       if (frameCount %10 == 0) {

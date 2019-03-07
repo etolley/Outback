@@ -9,8 +9,8 @@ public class Constellation {
         float phi = random(0, 2*3.14159);
         float x = r*cos(phi);
         float y = r*sin(phi);
-        if (y > height-h*1.1) continue;
-        stars.add(new Star(x, y));
+       // if (y > height-h*1.1) continue;
+        stars.add(new Star(x, y,h));
       }
     }
   }
@@ -25,26 +25,53 @@ public class Star {
   private float x;
   private float y;
   private float r;
+  private float centerx;
+  private float centery;
+  private float phi;
+  private float dphi;
+  private float horizon;
 
-  Star(float x_in, float y_in) {
+  Star(float x_in, float y_in, float h_in) {
     x = x_in;
     y= y_in;
+    centerx = 0;
+    centery = 0;
+    horizon = h_in;
     r = random(1.5, 3.5);
+    phi = 0;
+    dphi = random(0.001/2,0.002/2);
+  }
+  
+  Star(float x_in, float y_in, float xcenter_in, float ycenter_in) {
+    this(x_in,y_in,0);
+    centerx = xcenter_in;
+    centery = ycenter_in;
   }
 
   void draw() {
     pushMatrix();
+    rotate(phi);
+    phi+= dphi;
     translate(x, y);
+    
+    
     noStroke();
 
     float fade = 0;
-    if (frameCount > 1400)
-      fade = min(255, (frameCount-1400)/2.);
+    if (frameCount > 1200)
+      fade = (frameCount-1200)/4.;
+    if (frameCount > 6000)
+      fade = 255 - (frameCount-6000)/4.;
+      
+    if (fade > 255) fade = 255;
+    if (fade < 0) fade = 0;
+    //if (y > height-horizon*1.1) fade = 0;
+    // TODO: fade out again at 6000
     fill(colors.LIGHT, 50*fade/100.);
     //float rscale = 1+1*sin(0.005*frameCount);
     //println(  sm.getElement(2).name(), sm.getElement(2).amplitude(0));
-    float rscale = 200*sm.getElement(2).amplitude(2);
-    ellipse(0, 0, r*rscale, r*rscale);
+    //float rscale = 200*sm.getElement(2).amplitude(2);
+    //ellipse(0, 0, r*rscale, r*rscale);
     fill(colors.LIGHT, fade);
     ellipse(0, 0, r, r);
     popMatrix();

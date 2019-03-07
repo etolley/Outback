@@ -45,7 +45,9 @@ void setup() {
   int nLines = 10;
   for (int i = 0; i < nLines; i++) {
     float margin = height*(1 - horizon)*i*i*i/(nLines - 1)/(nLines - 1)/(nLines - 1);
-    Wave thisWave = new Wave(height*horizon + margin, 40-i*2, margin, random(-1, 1));
+    float direction = random(0.1,1);
+    if (random(0,1) > 0.5) direction*= -1;
+    Wave thisWave = new Wave(height*horizon + margin, 40-i*2, margin,direction);
     //thisWave.setSpectrum(spectrum, BANDS);
     waves.add( thisWave);
   }
@@ -57,7 +59,7 @@ void draw() {
   
   colors.evolve(frameCount);
 
-  if (frameCount == 3) {
+  if (frameCount == 50) {
     sm.play();  
     sm.playAll();
   }
@@ -69,16 +71,21 @@ void draw() {
 
 
   drawHeavens(height*horizon - 200);
+  noStroke();
+  fill(colors.DARK);
+  rect(0,height*horizon,width,height);
   
-
-
-
   for (Wave w : waves) w.draw();
 
   stroke(colors.LIGHT);
-  line (0, height*horizon, width, height*horizon);
   
-  drawOverlay();
+  line (0, height*horizon, width, height*horizon);
+  stroke(#ffffff,10);
+  for (int i = 0; i < 10; i++)
+    line (i*10, height*horizon, width-i*10, height*horizon);
+  
+  //drawOverlay();
+  //if (frameCount < 8000) saveFrame();
 }
 
 void drawHeavens(float y) {
@@ -98,30 +105,12 @@ void drawHeavens(float y) {
 
   fill(colors.LIGHT);
   ellipse(0, 0, 160, 160);
+  fill(#ffffff,100);
+  ellipse(0, 0, 150, 150);
   
-  float shadowr = min(max(0,frameCount/2. - 200),155);
-  fill(colors.MEDIUM,shadowr);
-    
-  //ellipse(0, 0, shadowr, shadowr);
   
-  artifact.draw();
-
-   
-  
-  /*fill(colors.DARKER);
-  ellipse(moonx, moony, 160, 160);
-
-  for (int i = 0; i < 5; i++) {
-    stroke(lerpColor(colors.LIGHT, colors.MEDIUM, i/4.));
-    ellipse(moonx, moony, 159-i*1.5, 159-i*1.5);
-  }*/
+  //artifact.draw();
   popMatrix();
-  
-  //moon.draw(width/2, y);
-  
-  
-  
-
 }
 
 void drawOverlay(){
