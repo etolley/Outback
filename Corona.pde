@@ -1,8 +1,4 @@
 public class Corona implements Drawable {
-  //float[] spectrum;
-  //int bands = 0;
-  //float[] xpts;
-  //float[] ypts;
   float[] rpts;
   float[] thetapts;
   float[][] rvec;
@@ -20,7 +16,6 @@ public class Corona implements Drawable {
     return 0;
   }
   void draw() {
-    //drawLines();
     drawHalo();
   }
 

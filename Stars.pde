@@ -1,7 +1,5 @@
 public class Constellation {
   private ArrayList<Star> stars;
-
-
   Constellation(float h) {
     stars = new ArrayList<Star>();
     for (int r = 100; r < width; r+= 10) {
@@ -9,14 +7,11 @@ public class Constellation {
         float phi = random(0, 2*3.14159);
         float x = r*cos(phi);
         float y = r*sin(phi);
-       // if (y > height-h*1.1) continue;
         stars.add(new Star(x, y,h));
       }
     }
   }
-
   void draw() {
-
     for (Star s : stars) s.draw();
   }
 }
@@ -53,25 +48,18 @@ public class Star {
     rotate(phi);
     phi+= dphi;
     translate(x, y);
-    
-    
+   
     noStroke();
 
     float fade = 0;
     if (frameCount > 1200)
       fade = (frameCount-1200)/4.;
-    if (frameCount > 6000)
-      fade = 255 - (frameCount-6000)/4.;
+    if (frameCount > 5500)
+      fade = 255 - (frameCount-5500)/4.;
       
     if (fade > 255) fade = 255;
     if (fade < 0) fade = 0;
-    //if (y > height-horizon*1.1) fade = 0;
-    // TODO: fade out again at 6000
     fill(colors.LIGHT, 50*fade/100.);
-    //float rscale = 1+1*sin(0.005*frameCount);
-    //println(  sm.getElement(2).name(), sm.getElement(2).amplitude(0));
-    //float rscale = 200*sm.getElement(2).amplitude(2);
-    //ellipse(0, 0, r*rscale, r*rscale);
     fill(colors.LIGHT, fade);
     ellipse(0, 0, r, r);
     popMatrix();

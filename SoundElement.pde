@@ -37,6 +37,10 @@ public class SoundElement {
     amps.add(amp);
     spectra.add(new float[bands]);
   }
+  
+  void print(){
+    println("Duration = " + soundFiles.get(0).duration() + ", frames = " + soundFiles.get(0).frames());
+  }
 
   void init() {
     soundFiles = new ArrayList<SoundFile>();
@@ -47,6 +51,10 @@ public class SoundElement {
 
   void play() { 
     for (SoundFile f : soundFiles) f.play();
+  }
+  
+  void jump(float time) { 
+    for (SoundFile f : soundFiles) f.jump(time);
   }
 
   void analyze() {

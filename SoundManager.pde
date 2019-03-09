@@ -7,6 +7,7 @@ public class SoundManager {
   SoundManager(PApplet p) {
     soundElements = new ArrayList<SoundElement>();
     soundElements.add(new SoundElement(p, BANDS, "Outback", "Outback.aif" ));
+    soundElements.get(0).print();
 
     //1
     String[] chords = {"channels/Chords.aif", "channels/Melody.aif", "channels/Bass.aif"};
@@ -19,13 +20,13 @@ public class SoundManager {
     //3
     soundElements.add(new SoundElement(p, BANDS, "Starfalls", "channels/Starfalls.aif" ));
 
-    soundElements.add(new SoundElement(p, BANDS, "Toms", "channels/Toms.aif" ));
+    /*soundElements.add(new SoundElement(p, BANDS, "Toms", "channels/Toms.aif" ));
 
     soundElements.add(new SoundElement(p, BANDS, "VOX", "channels/VOX.aif" ));
 
 
     soundElements.add(new SoundElement(p, BANDS, "Lead_Synth", "channels/Lead_Synth.aif" ));
-    soundElements.add(new SoundElement(p, BANDS, "Atmospherics", "channels/Atmospherics.aif" ));
+    soundElements.add(new SoundElement(p, BANDS, "Atmospherics", "channels/Atmospherics.aif" ));*/
   }
 
   int frames() {
@@ -35,10 +36,16 @@ public class SoundManager {
   void play(int e) {
     soundElements.get(e).play();
   }
+ 
 
   void playAll() {
     for (int i = 1; i < soundElements.size(); i++) 
       soundElements.get(i).play();
+  }
+  
+  void jumpAll(float time) {
+    for (int i = 0; i < soundElements.size(); i++) 
+      soundElements.get(i).jump(time);
   }
 
   void play() {
